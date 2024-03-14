@@ -46,8 +46,12 @@ public class RegisterServlet extends HttpServlet {
         // 使用 BeanUtils.populate 将接收到的参数保存到 user 对象中
         try {
             BeanUtils.populate(user, parameterMap);
-            //4. 使用DBUtils将用户信息存储到数据库
-            //这里需要mysql驱动、druid、dbutils的jar包
+            /**
+             * 使用DBUtils将用户信息存储到数据库
+             * 这里需要mysql驱动、druid、dbutils的jar包
+             * 使用了BeanUtils和DBUtils两个工具类来简化数据处理和数据库操作的过程。
+             * 在存储数据到数据库时，使用了QueryRunner类和Druid数据源来进行数据库操作
+             */
             QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
             String sql = "insert into user values (null,?,?,?,?,?,?,?)";
             row = queryRunner.update(sql, user.getUsername(), user.getPassword(), user.getAddress(),
@@ -57,14 +61,17 @@ public class RegisterServlet extends HttpServlet {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
-            response.getWriter().write("SQL异常信息如下:"+e.getMessage());
+            response.getWriter().write("SQL异常信息如下:" + e.getMessage());
             throw new RuntimeException(e);
         }
-        //如果注册成功，跳转至 index.html
+        // 如果注册成功，跳转至 index.html
         if (row != 1) {
+            System.out.println("注册失败");
             response.getWriter().write("注册失败，数据库插入失败");
+        } else {
+            System.out.println("注册成功");
+            response.getWriter().write("注册成功");
+            response.sendRedirect("index.html");
         }
-        response.sendRedirect("index.html");
-
     }
 }

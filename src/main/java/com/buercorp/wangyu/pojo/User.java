@@ -2,6 +2,10 @@ package com.buercorp.wangyu.pojo;
 
 import java.io.Serializable;
 
+/**
+ * 用户实体类
+ * @author 忆白
+ */
 public class User implements Serializable {
     private Integer id;
     private String username;

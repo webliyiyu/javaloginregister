@@ -1,4 +1,4 @@
-package com.buercorp.wangyu.login;
+package com.buercorp.wangyu.servlet.user;
 
 
 import com.buercorp.wangyu.pojo.User;
@@ -25,9 +25,9 @@ public class LoginServlet extends HttpServlet {
 
         //1. 解决乱码
         //解决请求参数的中文乱码
-        request.setCharacterEncoding("UTF-8");
-        //解决响应中文乱码
-        response.setContentType("text/html;charset=utf-8");
+//        request.setCharacterEncoding("UTF-8");
+//        //解决响应中文乱码
+//        response.setContentType("text/html;charset=utf-8");
 
         //2. 获取请求参数username和password
         String username = request.getParameter("username");
@@ -44,17 +44,24 @@ public class LoginServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         System.out.println("查询到的user数据: " + user);
 
 
         if (user == null) {
+            System.out.println("用户不存在");
             response.getWriter().write("用户不存在");
-        }
-        if (!(user.getPassword().equals(password))){
+        } else if (!(user.getPassword().equals(password))) {
+            System.out.println("密码错误");
             response.getWriter().write("密码错误");
+        } else {
+//            // 4. 把user数据保存到session中
+//            request.getSession().setAttribute("user", user);
+//            // 5. 转化 跳转到首页
+//            request.getRequestDispatcher("UserNick").forward(request, response);
+            response.sendRedirect("index.jsp");
         }
 
-        response.sendRedirect("index.html");
 
     }
 }

@@ -25,6 +25,5 @@ public class SrevletDemo03 extends HttpServlet {
         System.out.println("Hello Servlet");
         // 通过流输出数据到浏览器
         resp.getWriter().write("Hello Servlet");
-
     }
 }

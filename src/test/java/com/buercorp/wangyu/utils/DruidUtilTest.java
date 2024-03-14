@@ -20,7 +20,7 @@ class DruidUtilTest {
         String sql = "insert into user(`username`, `password`, `address`, `nickname`, `gender`, `email`) values (?,?,?,?,?,?)";
 
         //将user用户存储的数据 插入 到数据库中
-        int i = queryRunner.update(sql, "liyiyu", "123123", "深圳", "kkkk", "male", "123@qq.com");
+        int i = queryRunner.update(sql, "liyiyu", "123123", "成都", "kkkk", "male", "123@qq.com");
         System.out.println("插入的数据行数: " + i);
     }
 
