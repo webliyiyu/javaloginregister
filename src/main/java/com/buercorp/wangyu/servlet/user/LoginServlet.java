@@ -25,9 +25,9 @@ public class LoginServlet extends HttpServlet {
 
         //1. 解决乱码
         //解决请求参数的中文乱码
-//        request.setCharacterEncoding("UTF-8");
-//        //解决响应中文乱码
-//        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+        //解决响应中文乱码
+        response.setContentType("text/html;charset=utf-8");
 
         //2. 获取请求参数username和password
         String username = request.getParameter("username");
