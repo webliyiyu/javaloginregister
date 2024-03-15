@@ -15,6 +15,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Map;
 
+/**
+ * 注册
+ */
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -64,14 +67,14 @@ public class RegisterServlet extends HttpServlet {
             response.getWriter().write("SQL异常信息如下:" + e.getMessage());
             throw new RuntimeException(e);
         }
-        // 如果注册成功，跳转至 index.html
+        // 如果注册成功，跳转至 index.jsp
         if (row != 1) {
             System.out.println("注册失败");
             response.getWriter().write("注册失败，数据库插入失败");
         } else {
             System.out.println("注册成功");
             response.getWriter().write("注册成功");
-            response.sendRedirect("index.html");
+            response.sendRedirect("logio.jsp");
         }
     }
 }

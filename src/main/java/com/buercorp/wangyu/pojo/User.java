@@ -161,4 +161,7 @@ public class User implements Serializable {
     public String toString() {
         return "User{id = " + id + ", username = " + username + ", password = " + password + ", address = " + address + ", nickname = " + nickname + ", gender = " + gender + ", email = " + email + ", status = " + status + "}";
     }
+
+    public void update() {
+    }
 }

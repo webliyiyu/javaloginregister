@@ -15,7 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-
+/**
+ * 登录
+ */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,7 +40,7 @@ public class LoginServlet extends HttpServlet {
         //3. 连接数据库校验用户名和密码，也就是执行查询的SQL语句
         QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
         String sql = "select * from user where username=?";
-        //执行查询，查询一条数据，封装到User中
+        // 执行查询，查询一条数据，封装到User中
         User user = null;
         try {
             user = queryRunner.query(sql, new BeanHandler<>(User.class), username);
@@ -51,10 +53,12 @@ public class LoginServlet extends HttpServlet {
 
         if (user == null) {
             System.out.println("用户不存在");
-            response.getWriter().write("用户不存在");
-        } else if (!(user.getPassword().equals(password))) {
+            response.getWriter().write("<script>alert('用户不存在'); window.location.href='login.jsp';</script>");
+        }
+        if (!(user.getPassword().equals(password))) {
             System.out.println("密码错误");
-            response.getWriter().write("密码错误");
+            response.getWriter().write("<script>alert('密码错误'); window.location.href='login.jsp';");
+//            response.sendRedirect("login.jsp"); // 重定向到登录页面
         } else {
 //            // 4. 把user数据保存到session中
 //            request.setAttribute("user", user);
@@ -65,7 +69,7 @@ public class LoginServlet extends HttpServlet {
             request.getSession().setAttribute("req", request);
 
             Object attribute = request.getSession().getAttribute("req");
-            System.out.println("attribute::: " + attribute);
+
 
             response.sendRedirect("index.jsp");
         }

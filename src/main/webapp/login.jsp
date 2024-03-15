@@ -49,8 +49,7 @@
     body {
         display: flex;
         height: 100vh;
-        background: linear-gradient( #20d0fe,#4b8dfe);
-
+        /*background: linear-gradient( #20d0fe,#4b8dfe);*/
     }
 
     .box {

@@ -29,20 +29,26 @@
 %>
 <h1>${user.nickname} 欢迎登录</h1>
 <h3>当前在线人数:</h3>
-<div> ${number} 人</div>
-
-<h2>请求信息</h2>
 <ul>
-    <li>1.协议： ${ req.scheme }</li>
-    <li>2.服务器 ip：${ req.serverName }</li>
-    <li>3.服务器端口：${ req.serverPort }</li>
-    <li>4.获取工程路径：${ req.contextPath }</li>
-    <li>5.获取请求方法：${ req.method }</li>
-    <li>6.获取客户端 ip 地址：${ req.remoteHost }</li>
-    <li>7.获取请求的 url 地址：${ req.requestURL }</li>
+    <%
+        int number = (Integer) session.getAttribute("number");
+    %>
+    <li>当前在线人数：${ number }</li>
 </ul>
 
-<h2>用户信息</h2>
+
+<h3>请求信息</h3>
+<ul>
+    <li>协议： ${ req.scheme }</li>
+    <li>服务器 ip：${ req.serverName }</li>
+    <li>服务器端口：${ req.serverPort }</li>
+    <li>获取工程路径：${ req.contextPath }</li>
+    <li>获取请求方法：${ req.method }</li>
+    <li>获取客户端 ip 地址：${ req.remoteHost }</li>
+    <li>获取请求的 url 地址：${ req.requestURL }</li>
+</ul>
+
+<h3>用户信息</h3>
 <ul>
     <li>用户名：${ user.username }</li>
     <li>密码：${ user.password }</li>
@@ -54,5 +60,8 @@
 </ul>
 
 <button><a href="login.jsp">退出登录</a></button>
+<button><a href="logout">注销账户</a></button>
+<button><a href="update.jsp">修改信息</a></button>
+
 </body>
 </html>

@@ -5,6 +5,9 @@ import javax.sql.DataSource;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * 数据库链接池工具类
+ */
 public class DruidUtil {
 
     private static DataSource dataSource;
