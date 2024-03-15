@@ -3,6 +3,7 @@ package com.buercorp.wangyu.servlet.user;
 
 import com.buercorp.wangyu.pojo.User;
 import com.buercorp.wangyu.utils.DruidUtil;
+import com.mysql.cj.Session;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 
@@ -56,9 +57,16 @@ public class LoginServlet extends HttpServlet {
             response.getWriter().write("密码错误");
         } else {
 //            // 4. 把user数据保存到session中
-//            request.getSession().setAttribute("user", user);
+//            request.setAttribute("user", user);
 //            // 5. 转化 跳转到首页
 //            request.getRequestDispatcher("UserNick").forward(request, response);
+            request.getSession().setAttribute("user", user);
+            Object o = request.getSession().getAttribute("user");
+            request.getSession().setAttribute("req", request);
+
+            Object attribute = request.getSession().getAttribute("req");
+            System.out.println("attribute::: " + attribute);
+
             response.sendRedirect("index.jsp");
         }
 

@@ -19,8 +19,9 @@ public class CountSessionListener implements HttpSessionListener {
         ServletContext servletContext = session.getServletContext(); // 获取 ServletContext
         int number = (int) servletContext.getAttribute("number"); // 增加number值
         number++;
+        // 绑定到ServletContext对象上，以便在其他地方通过getAttribute方法获取该属性的值
         servletContext.setAttribute("number", number);
-
+        System.out.println("number:" + number);
         System.out.println("有人上线了");
     }
 
@@ -33,7 +34,7 @@ public class CountSessionListener implements HttpSessionListener {
         int number = (int) servletContext.getAttribute("number"); // 减少number值
         number--;
         servletContext.setAttribute("number", number);
-
+        System.out.println("number:" + number);
         System.out.println("有人下线了....");
     }
 }
