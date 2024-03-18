@@ -16,7 +16,7 @@ public class User implements Serializable {
     private String email;
     private String status;//1 表示已激活  0表示未激活
 
-    public User() {
+    public User(Integer id, String nickname, String address, String gender, String email, String password, String username) {
     }
 
     public User(Integer id, String username, String password, String address, String nickname, String gender, String email, String status) {
@@ -50,7 +50,7 @@ public class User implements Serializable {
      * 获取
      * @return username
      */
-    public String getUsername() {
+    public static String getUsername() {
         return username;
     }
 

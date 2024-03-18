@@ -24,17 +24,9 @@ public class LogoutUser extends HttpServlet {
 
         User user = (User) request.getSession().getAttribute("user");
         String username = user.getUsername();
-        // 连接数据库校验用户名和密码，也就是执行查询的SQL语句
-        QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
-        String sql = "DELETE FROM user WHERE username = ?";
-        try {
-            // 使用QueryRunner类的update方法执行SQL更新语句
-            queryRunner.update(sql, username);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+
         request.getSession().invalidate();
-        System.out.println("注销成功");
         response.getWriter().write("<script>alert('注销成功'); window.location.href='login.jsp';");
     }
 
