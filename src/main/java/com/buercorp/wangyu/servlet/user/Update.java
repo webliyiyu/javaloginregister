@@ -5,8 +5,12 @@ import com.buercorp.wangyu.utils.DruidUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbutils.QueryRunner;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +19,7 @@ import java.util.Map;
 
 @WebServlet("/update")
 public class Update extends HttpServlet {
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 保证解码和编码一致
         //解决请求参数的中文乱码
         request.setCharacterEncoding("UTF-8");
@@ -31,7 +35,8 @@ public class Update extends HttpServlet {
             }
         }
         // 使用BeanUtils 将parameterMap中的数据，存储到User对象中
-        User user = new User();
+        User user = new User(); // null
+        System.out.println(" user " + user);
         // 设置默认的status为"0"
         user.setStatus("0");
         try {
@@ -39,13 +44,22 @@ public class Update extends HttpServlet {
 
             Connection connection = DruidUtil.getDataSource().getConnection();
             QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
-            String sql = "update user set username=?, password=?, nickname=?, gender=?, address=?,email=? ";
-            queryRunner.update(sql, user.getUsername(), user.getPassword(), user.getAddress(),
+            String sql = "update user set username=?, password=?,  address=?, nickname=?, gender=?, email=? ";
+//            queryRunner.update(sql, user.getUsername(), user.getPassword(), user.getAddress(),
+//                    user.getNickname(), user.getGender(), user.getEmail(), user.getStatus());
+            queryRunner.update(connection, sql, user.getUsername(), user.getPassword(), user.getAddress(),
                     user.getNickname(), user.getGender(), user.getEmail(), user.getStatus());
 
             System.out.println("username:::::" + user.getUsername());
             System.out.println("password:::::" + user.getPassword());
 
+            Integer userId = Integer.valueOf(user.getId());
+            System.out.println("userId:::::" + userId);
+            User newUser = new User(userId, user.getUsername(), user.getPassword(), user.getAddress(), user.getNickname(), user.getGender(), user.getEmail(), user.getStatus());
+            HttpServlet session = (HttpServlet) request.getSession();
+            request.setAttribute("user", newUser);
+
+//            session.setAttribute("user", newUser);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
@@ -56,10 +70,12 @@ public class Update extends HttpServlet {
 
         System.out.println("修改成功");
 
-
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
         doPost(request, response);
     }
 }
+
+
+
