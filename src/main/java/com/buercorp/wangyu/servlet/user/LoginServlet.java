@@ -19,6 +19,7 @@ import java.sql.SQLException;
  * 登录
  */
 @WebServlet("/login")
+// @Controller("/login")
 public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
@@ -41,7 +42,7 @@ public class LoginServlet extends HttpServlet {
         QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
         String sql = "select * from user where username=?";
         // 执行查询，查询一条数据，封装到User中
-        User user = null;
+        User user ;
         try {
             user = queryRunner.query(sql, new BeanHandler<>(User.class), username);
         } catch (SQLException e) {
@@ -50,30 +51,21 @@ public class LoginServlet extends HttpServlet {
 
         System.out.println("查询到的user数据: " + user);
 
-
         if (user == null) {
             System.out.println("用户不存在");
             response.getWriter().write("<script>alert('用户不存在'); window.location.href='login.jsp';</script>");
         }
         if (!(user.getPassword().equals(password))) {
             System.out.println("密码错误");
-            response.getWriter().write("<script>alert('密码错误'); window.location.href='login.jsp';");
-//            response.sendRedirect("login.jsp"); // 重定向到登录页面
-        } else {
-//            // 4. 把user数据保存到session中
-//            request.setAttribute("user", user);
-//            // 5. 转化 跳转到首页
-//            request.getRequestDispatcher("UserNick").forward(request, response);
-            request.getSession().setAttribute("user", user);
-            Object o = request.getSession().getAttribute("user");
-            request.getSession().setAttribute("req", request);
-
-            Object attribute = request.getSession().getAttribute("req");
-
-
-            response.sendRedirect("index.jsp");
+            response.getWriter().write("<script>alert('密码错误'); window.location.href='login.jsp';</script>");
         }
 
-
+        request.getSession().setAttribute("user", user);
+        Object o = request.getSession().getAttribute("user");
+        request.getSession().setAttribute("req", request);
+        Object attribute = request.getSession().getAttribute("req");
+        System.out.println("session中存入的user数据: " + o);
+        System.out.println("session中存入的req数据: " + attribute);
+        response.sendRedirect("index.jsp");
     }
 }

@@ -7,6 +7,7 @@
 --%>
 <%@ page import="com.buercorp.wangyu.pojo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Title</title>
@@ -27,7 +28,7 @@
     User user = (User) session.getAttribute("user");
 //    pageContext.setAttribute("req", request);
 %>
-<h1>${user.nickname} 欢迎登录</h1>
+<h1>${user.nickname} 欢迎登录 </h1>
 <h3>当前在线人数:</h3>
 <ul>
     <%

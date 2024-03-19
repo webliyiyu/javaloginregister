@@ -35,6 +35,6 @@ public class CountSessionListener implements HttpSessionListener {
         number--;
         servletContext.setAttribute("number", number);
         System.out.println("number:" + number);
-        System.out.println("有人下线了....");
+        System.out.println("有人下线了");
     }
 }

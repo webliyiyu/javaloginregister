@@ -1,6 +1,9 @@
 package com.buercorp.wangyu.servlet.user;
 
+import com.buercorp.wangyu.dao.impl.UserDaolmpl;
 import com.buercorp.wangyu.pojo.User;
+import com.buercorp.wangyu.service.UserService;
+import com.buercorp.wangyu.service.impl.UserSericeimpl;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.ServletException;
@@ -17,6 +20,9 @@ import java.util.Map;
  */
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
+    private UserSericeimpl userSerice = new UserSericeimpl();
+    private UserDaolmpl userDao = new UserDaolmpl();
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
@@ -36,27 +42,28 @@ public class RegisterServlet extends HttpServlet {
                 System.out.println(entry.getKey() + ": " + value);
             }
         }
-
         //3. 使用BeanUtils 将parameterMap中的数据，存储到User对象中
-        User user = new User(user.getId(), user.getNickname(), user.getAddress(), user.getGender(), user.getEmail(), user.getPassword(), user.getUsername());
-        //设置默认的status为"0"
-        user.setStatus("0");
-
+        User user = new User();
         try {
-            BeanUtils.populate(user, parameterMap);
+            BeanUtils.copyProperties(parameterMap, user);
+            //设置默认的status为"0"
+            user.setStatus("0");
+//            BeanUtils.populate(user, parameterMap);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
         // 如果注册成功，跳转至 index.jsp
-        if (row != 1) {
+        boolean b = userSerice.insertUser(user);
+        System.out.println("b: " + b);
+        if (!b) {
             System.out.println("注册失败");
-            response.getWriter().write("注册失败，数据库插入失败");
-        } else {
-            System.out.println("注册成功");
-            response.getWriter().write("注册成功");
-            response.sendRedirect("logio.jsp");
+            response.getWriter().write("<script>alert('注册失败，数据库插入失败'); window.location.href='register.jsp';</script>");
         }
+        System.out.println("注册成功");
+        response.getWriter().write("<script>alert('注册成功'); window.location.href='login.jsp';</script>");
+//        response.sendRedirect("logio.jsp");
+
     }
 }
