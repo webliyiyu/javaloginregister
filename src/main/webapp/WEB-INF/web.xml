@@ -14,13 +14,13 @@
 <!--    <url-pattern>/demo</url-pattern>-->
 <!--  </servlet-mapping>-->
 
-  <servlet>
-    <servlet-name>demo1</servlet-name>
-    <servlet-class>com.buercorp.wangyu.ServletDemo1</servlet-class>
-  </servlet>
+<!--  <servlet>-->
+<!--    <servlet-name>demo1</servlet-name>-->
+<!--    <servlet-class>com.buercorp.wangyu.ServletDemo1</servlet-class>-->
+<!--  </servlet>-->
   
-  <servlet-mapping>
-    <servlet-name>demo1</servlet-name>
-    <url-pattern>/demo1</url-pattern>
-  </servlet-mapping>
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>demo1</servlet-name>-->
+<!--    <url-pattern>/demo1</url-pattern>-->
+<!--  </servlet-mapping>-->
 </web-app>
