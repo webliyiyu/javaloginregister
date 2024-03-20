@@ -56,7 +56,7 @@ public class UserDaolmpl implements UserDao {
     @Override
     public boolean updateUser(User user, int id) {
         QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
-        String sql = "update user set name=?,password=?,address=?,nickname=?,gender=?,email=? Where id=?";
+        String sql = "update user set username=?,password=?,address=?,nickname=?,gender=?,email=? Where id=?";
         int update = 0;
         //将user用户存储的数据 插入 到数据库中
         try {
@@ -68,7 +68,6 @@ public class UserDaolmpl implements UserDao {
             throw new RuntimeException(e);
         }
         return update > 0;
-
     }
 
     @Override

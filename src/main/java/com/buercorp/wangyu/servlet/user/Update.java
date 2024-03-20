@@ -70,9 +70,6 @@ public class Update extends HttpServlet {
 
         }*/
 
-        // 获取当前登录用户信息
-        System.out.println("当前登录用户信息：" + user);
-
         try {
             // 将请求参数赋值给user
             BeanUtils.populate(user, parameterMap);
@@ -81,21 +78,22 @@ public class Update extends HttpServlet {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+        // 获取当前登录用户信息
+        System.out.println("当前登录用户信息：" + user);
+        UserInfo userInfo = new UserInfo(user.getUsername(), user.getPassword(), user.getAddress(), user.getNickname(), user.getGender(), user.getEmail());
+        // 数据只在当前请求的生命周期内有效
+        request.setAttribute("userInfo", userInfo);
+
+        System.out.println("当前更新用户信息：" + userInfo);
+
         UserSericeimpl userSericeimpl = new UserSericeimpl();
         boolean b = userSericeimpl.updateUser(user, id);
-        //UserInfo userInfo = new UserInfo(user.getUsername(), user.getPassword(), user.getAddress(), user.getNickname(), user.getGender(), user.getEmail());
-        // 数据只在当前请求的生命周期内有效
-        //request.setAttribute("userInfo", userInfo);
-
-        //System.out.println("当前更新用户信息：" + userInfo);
-
-
         request.getSession().setAttribute("user", user);
         System.out.println("更新用户信息：" + b);
-        if (b) {
+        if (!b) {
             try {
-                response.getWriter().write("<script>alert('更新成功'); window.location.href='login.jsp';");
-                System.out.println("修改成功");
+                response.getWriter().write("<script>alert('更新失败'); window.location.href='update.jsp';");
+                System.out.println("修改失败");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
