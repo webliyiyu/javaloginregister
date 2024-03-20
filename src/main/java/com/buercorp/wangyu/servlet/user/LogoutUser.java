@@ -1,6 +1,7 @@
 package com.buercorp.wangyu.servlet.user;
 
 import com.buercorp.wangyu.pojo.User;
+import com.buercorp.wangyu.service.impl.UserSericeimpl;
 import com.buercorp.wangyu.utils.DruidUtil;
 import com.mysql.cj.Session;
 import org.apache.commons.dbutils.QueryRunner;
@@ -23,11 +24,14 @@ public class LogoutUser extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
 
         User user = (User) request.getSession().getAttribute("user");
-        String username = user.getUsername();
 
+        int userId = user.getId();
+        System.out.println("userId "+userId);
+        UserSericeimpl userService = new UserSericeimpl();
+        userService.deleteUser(userId);
 
-        request.getSession().invalidate();
         response.getWriter().write("<script>alert('注销成功'); window.location.href='login.jsp';");
+        request.getSession().invalidate();
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {

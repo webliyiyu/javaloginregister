@@ -1,6 +1,8 @@
 package com.buercorp.wangyu.servlet.user;
 
 import com.buercorp.wangyu.pojo.User;
+import com.buercorp.wangyu.pojo.UserInfo;
+import com.buercorp.wangyu.service.impl.UserSericeimpl;
 import com.buercorp.wangyu.utils.DruidUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbutils.QueryRunner;
@@ -11,22 +13,40 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Map;
 
 @WebServlet("/update")
 public class Update extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         // 保证解码和编码一致
-        //解决请求参数的中文乱码
-        request.setCharacterEncoding("UTF-8");
-        //解决响应中文乱码
+        // 解决请求参数的中文乱码
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        // 解决响应中文乱码
         response.setContentType("text/html;charset=utf-8");
+
+        // 获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        int id = user.getId();
 
         //2. 获取所有的请求参数
         Map<String, String[]> parameterMap = request.getParameterMap();
-        User user = new User();
+        System.out.println("接收到的参数: ");
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+            for (String value : entry.getValue()) {
+                System.out.println(entry.getKey() + ": " + value);
+            }
+        }
+        //设置默认的status为"0"
+        user.setStatus("0");
+        // 获取所有的请求参数
+        /*Map<String, String[]> parameterMap = request.getParameterMap();
         for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
             String key = entry.getKey();
             String[] values = entry.getValue();
@@ -48,40 +68,41 @@ public class Update extends HttpServlet {
                     break;
             }
 
-//            for (String value : entry.getValue()) {
-//                System.out.println(entry.getKey() + ": " + value);
-//            }
-        }
-        // 使用BeanUtils 将parameterMap中的数据，存储到User对象中
-//        user = new User(user.getId(), user.getNickname(), user.getAddress(), user.getGender(), user.getEmail(), user.getPassword(), user.getUsername()); // null
-        // 设置默认的status为"0"
+        }*/
+
+        // 获取当前登录用户信息
+        System.out.println("当前登录用户信息：" + user);
 
         try {
-            // 获取当前登录用户信息
-            User object = (User) request.getSession().getAttribute("user");
-            QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
-            String sql = "update user set username=?, password=?,  address=?, nickname=?, gender=?, email=? where username = ?";
-            queryRunner.update(sql, user.getUsername(), user.getPassword(), user.getAddress(),
-                    user.getNickname(), user.getGender(), user.getEmail(), object.getUsername());
-
-//            Integer userId = Integer.valueOf(user.getId());
-//            System.out.println("userId:::::" + userId);
-//            User newUser = new User(userId, user.getUsername(), user.getPassword(), user.getAddress(), user.getNickname(), user.getGender(), user.getEmail(), user.getStatus());
-//            HttpServlet session = (HttpServlet) request.getSession();
-//            request.setAttribute("user", user);
-
-//            session.setAttribute("user", newUser);
-        } catch (SQLException e) {
+            // 将请求参数赋值给user
+            BeanUtils.populate(user, parameterMap);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("修改成功");
+        UserSericeimpl userSericeimpl = new UserSericeimpl();
+        boolean b = userSericeimpl.updateUser(user, id);
+        //UserInfo userInfo = new UserInfo(user.getUsername(), user.getPassword(), user.getAddress(), user.getNickname(), user.getGender(), user.getEmail());
+        // 数据只在当前请求的生命周期内有效
+        //request.setAttribute("userInfo", userInfo);
 
+        //System.out.println("当前更新用户信息：" + userInfo);
+
+
+        request.getSession().setAttribute("user", user);
+        System.out.println("更新用户信息：" + b);
+        if (b) {
+            try {
+                response.getWriter().write("<script>alert('更新成功'); window.location.href='login.jsp';");
+                System.out.println("修改成功");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, java.io.IOException {
         doPost(request, response);
     }
 }
-
-
-

@@ -43,8 +43,10 @@ public class UserDaolmpl implements UserDao {
              */
             QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
             String sql = "insert into user values (null,?,?,?,?,?,?,?)";
+            //将user用户存储的数据 插入 到数据库中
             row = queryRunner.update(sql, user.getUsername(), user.getPassword(), user.getAddress(),
                     user.getNickname(), user.getGender(), user.getEmail(), user.getStatus());
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -52,14 +54,14 @@ public class UserDaolmpl implements UserDao {
     }
 
     @Override
-    public boolean updateUser(User user) {
+    public boolean updateUser(User user, int id) {
         QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
         String sql = "update user set name=?,password=?,address=?,nickname=?,gender=?,email=? Where id=?";
         int update = 0;
         //将user用户存储的数据 插入 到数据库中
         try {
             update = queryRunner.update(sql, user.getUsername(), user.getPassword(), user.getAddress(),
-                    user.getNickname(), user.getGender(), user.getEmail(), user.getStatus());
+                    user.getNickname(), user.getGender(), user.getEmail(), id);
 //            User newUser = new User(user.getId(), user.getNickname(), user.getAddress(), user.getGender(), user.getEmail(), user.getPassword(), user.getUsername());
 
         } catch (SQLException e) {

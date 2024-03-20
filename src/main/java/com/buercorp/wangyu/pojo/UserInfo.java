@@ -1,6 +1,8 @@
 package com.buercorp.wangyu.pojo;
 
 public class UserInfo {
+    private String username;
+    private String password;
     private String address;
     private String nickname;
     private String gender;
@@ -9,11 +11,45 @@ public class UserInfo {
     public UserInfo() {
     }
 
-    public UserInfo(String address, String nickname, String gender, String email) {
+    public UserInfo(String username, String password, String address, String nickname, String gender, String email) {
+        this.username = username;
+        this.password = password;
         this.address = address;
         this.nickname = nickname;
         this.gender = gender;
         this.email = email;
+    }
+
+    /**
+     * 获取
+     * @return username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * 设置
+     * @param username
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * 获取
+     * @return password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * 设置
+     * @param password
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /**
@@ -81,6 +117,6 @@ public class UserInfo {
     }
 
     public String toString() {
-        return "UserInfo{address = " + address + ", nickname = " + nickname + ", gender = " + gender + ", email = " + email + "}";
+        return "UserInfo{username = " + username + ", password = " + password + ", address = " + address + ", nickname = " + nickname + ", gender = " + gender + ", email = " + email + "}";
     }
 }

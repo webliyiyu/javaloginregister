@@ -2,6 +2,7 @@ package com.buercorp.wangyu.servlet.user;
 
 
 import com.buercorp.wangyu.pojo.User;
+import com.buercorp.wangyu.service.impl.UserSericeimpl;
 import com.buercorp.wangyu.utils.DruidUtil;
 import com.mysql.cj.Session;
 import org.apache.commons.dbutils.QueryRunner;
@@ -38,7 +39,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         System.out.println("登录用户名: " + username + ", 密码:" + password);
 
-        //3. 连接数据库校验用户名和密码，也就是执行查询的SQL语句
+        /*//3. 连接数据库校验用户名和密码，也就是执行查询的SQL语句
         QueryRunner queryRunner = new QueryRunner(DruidUtil.getDataSource());
         String sql = "select * from user where username=?";
         // 执行查询，查询一条数据，封装到User中
@@ -49,7 +50,11 @@ public class LoginServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-        System.out.println("查询到的user数据: " + user);
+        System.out.println("查询到的user数据: " + user);*/
+
+        UserSericeimpl userSericeimpl = new UserSericeimpl();
+        User user = userSericeimpl.getUser(username, password);
+
 
         if (user == null) {
             System.out.println("用户不存在");
@@ -61,11 +66,9 @@ public class LoginServlet extends HttpServlet {
         }
 
         request.getSession().setAttribute("user", user);
-        Object o = request.getSession().getAttribute("user");
         request.getSession().setAttribute("req", request);
-        Object attribute = request.getSession().getAttribute("req");
-        System.out.println("session中存入的user数据: " + o);
-        System.out.println("session中存入的req数据: " + attribute);
+
+
         response.sendRedirect("index.jsp");
     }
 }

@@ -44,8 +44,10 @@ public class RegisterServlet extends HttpServlet {
         }
         //3. 使用BeanUtils 将parameterMap中的数据，存储到User对象中
         User user = new User();
+        boolean b = false;
         try {
-            BeanUtils.copyProperties(parameterMap, user);
+            // 使用 BeanUtils.populate 将接收到的参数保存到 user 对象中
+            BeanUtils.populate(user,parameterMap);
             //设置默认的status为"0"
             user.setStatus("0");
 //            BeanUtils.populate(user, parameterMap);
@@ -54,8 +56,10 @@ public class RegisterServlet extends HttpServlet {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+        UserSericeimpl userSerice = new UserSericeimpl();
+        b = userSerice.insertUser(user);
         // 如果注册成功，跳转至 index.jsp
-        boolean b = userSerice.insertUser(user);
+//        boolean b = userSerice.insertUser(user);
         System.out.println("b: " + b);
         if (!b) {
             System.out.println("注册失败");

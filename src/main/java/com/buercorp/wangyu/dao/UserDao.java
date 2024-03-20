@@ -7,7 +7,7 @@ public interface UserDao {
 
     boolean insertUser(User user);
 
-    boolean updateUser(User user);
+    boolean updateUser(User user, int id);
 
     User getUser(String username, String password);
 }
